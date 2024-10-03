@@ -18,8 +18,8 @@ enum STATES {
 };
 
 STATES state = LOADING;
-
-
+float startTime = 0.0;
+float attractDuration = 10.0 * 1000.0;
 
 void setup() {
 #if defined(__AVR_ATtiny85__) && (F_CPU == 16000000)
@@ -38,12 +38,13 @@ void loop() {
   switch (state) {
     case LOADING:
       {
-        colorWipe(strip.Color(255, 0, 0), 50);  // Red
+        colorWipe(strip.Color(0, 255, 0), 50);  // green
+        setState(ATTRACT);
         break;
       }
     case ATTRACT:
       {
-        colorWipe(strip.Color(0, 255, 0), 50);  // Green
+        rainbow(10);
         break;
       }
     case SCROLLING_TEXT:
@@ -63,11 +64,57 @@ void loop() {
   }
 }
 
+void setState(STATES newState) {
+  startTime = millis();
+  state = newState;
+
+  switch (state) {
+    case LOADING:
+      {
+        break;
+      }
+    case ATTRACT:
+      {
+        break;
+      }
+    case SCROLLING_TEXT:
+      {
+        break;
+      }
+    case OFF:
+      {
+        break;
+      }
+    default:
+      {
+        break;
+      }
+  }
+}
+
+void checkTimerInRainbow() {
+  float currentDuration = millis() - startTime;
+  if (currentDuration > attractDuration) {
+    setState(SCROLLING_TEXT);
+  }
+}
 
 void colorWipe(uint32_t color, int wait) {
   for (int i = 0; i < strip.numPixels(); i++) {  // For each pixel in strip...
     strip.setPixelColor(i, color);               //  Set pixel's color (in RAM)
     strip.show();                                //  Update strip to match
     delay(wait);                                 //  Pause for a moment
+  }
+}
+
+// Rainbow cycle along whole strip. Pass delay time (in ms) between frames.
+void rainbow(int wait) {
+  for (long firstPixelHue = 0; firstPixelHue < 5 * 65536; firstPixelHue += 256) {
+    strip.rainbow(firstPixelHue);
+    strip.show();  // Update strip with new contents
+    delay(wait);   // Pause for a moment
+
+    // check timer
+    checkTimerInRainbow();
   }
 }
