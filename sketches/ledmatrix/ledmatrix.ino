@@ -17,9 +17,11 @@ enum STATES {
   NUM_STATES
 };
 
+
 STATES state = LOADING;
 float startTime = 0.0;
 float attractDuration = 10.0 * 1000.0;
+
 
 void setup() {
 #if defined(__AVR_ATtiny85__) && (F_CPU == 16000000)
