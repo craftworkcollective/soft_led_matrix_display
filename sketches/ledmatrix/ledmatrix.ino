@@ -32,12 +32,13 @@ int serpentineMap[80] = {
   0, 1, 2, 3, 4, 5, 6, 7,           // Row 1 (right to left)
   
   // Second 40 LEDs (Module 2)
-  40, 41, 42, 43, 44, 45, 46, 47,   // Row 1 (right to left)
-  48, 49, 50, 51, 52, 53, 54, 55,   // Row 2 (left to right)
-  56, 57, 58, 59, 60, 61, 62, 63,   // Row 3 (right to left)
-  64, 65, 66, 67, 68, 69, 70, 71,   // Row 4 (left to right)
-  72, 73, 74, 75, 76, 77, 78, 79    // Row 5 (right to left)
+  40, 41, 42, 43, 44, 45, 46, 47,   // Row 1 (left to right)
+  55, 54, 53, 52, 51, 50, 49, 48,   // Row 2 (right to left)
+  56, 57, 58, 59, 60, 61, 62, 63,   // Row 3 (left to right)
+  71, 70, 69, 68, 67, 66, 65, 64,   // Row 4 (right to left)
+  72, 73, 74, 75, 76, 77, 78, 79    // Row 5 (left to right)
 };
+
 
 int A_pixels[] = { 0, 1, 2, 3, 4, 5, 9, 10, 11, 12, 13, 14, 15, 19, 20, 24, 25, 29 };
 int B_pixels[] = { 0, 1, 2, 3, 4, 5, 9, 10, 11, 12, 13, 14, 15, 19, 20, 24, 25, 26, 27, 28, 29 };
@@ -65,7 +66,7 @@ void setup() {
 }
 
 void loop() {
-
+//lightUpOneByOne(100); 
 lightUpColumns(1000); 
 return; 
   // ---  STATE MACHINE --- //
@@ -126,16 +127,35 @@ void setState(STATES newState) {
   }
 }
 
-// --- DEBUG TEXT --- //
+// --- DEBUG GRID --- //
+void lightUpOneByOne(int wait) {
+  // Loop through all 80 LEDs in the serpentineMap
+  for (int i = 0; i < 80; i++) {
+    clearGrid();  // Clear the grid before lighting up the next LED
+
+    // Get the LED index from the serpentine map
+    int ledIndex = serpentineMap[i];
+
+    // Light up the current LED
+    strip.setPixelColor(ledIndex, strip.Color(255, 0, 0));  // Light up in red (you can change color)
+
+    strip.show();  // Show the updated LED states
+    delay(wait);   // Wait before lighting the next LED
+  }
+}
+
+
 void lightUpColumns(int wait) {
-  // Loop through all 8 columns (since you have 8 columns in the grid)
-  for (int col = 0; col < 8; col++) {
+  // Loop through all 16 columns (since you have 8 columns per module and 2 modules)
+  for (int col = 0; col < 16; col++) {
     clearGrid();  // Clear the grid before lighting up the next column
 
     // Loop through all 5 rows (since you have 5 rows)
     for (int row = 0; row < 5; row++) {
       // Calculate the index in the serpentine map using the row and column
-      int ledIndex = serpentineMap[row * 8 + col];  // Each row has 8 LEDs, hence row * 8 + col
+      // For the first 8 columns (module 1), row * 8 + col works
+      // For the next 8 columns (module 2), adjust the column index to continue
+      int ledIndex = serpentineMap[row * 8 + (col % 8) + (col / 8) * 40];
       strip.setPixelColor(ledIndex, strip.Color(255, 0, 0));  // Light up the LED in red (you can change the color)
     }
 
