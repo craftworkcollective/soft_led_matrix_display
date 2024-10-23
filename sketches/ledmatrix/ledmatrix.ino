@@ -5,7 +5,7 @@
 #endif
 
 #define LED_PIN 6
-#define LED_COUNT 30
+#define LED_COUNT 80
 Adafruit_NeoPixel strip(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
 
 // ---  STATE MACHINE --- //
@@ -23,13 +23,20 @@ float startTime = 0.0;
 float attractDuration = 2.0 * 1000.0;
 
 // --- SCROLLING TEXT --- //
-int serpentineMap[30] = {
-  4, 3, 2, 1, 0,       // Row 1 (right to left)
-  5, 6, 7, 8, 9,       // Row 2 (left to right)
-  14, 13, 12, 11, 10,  // Row 3 (right to left)
-  15, 16, 17, 18, 19,  // Row 4 (left to right)
-  24, 23, 22, 21, 20,  // Row 5 (right to left)
-  25, 26, 27, 28, 29   // Row 6 (left to right)
+int serpentineMap[80] = {
+  // First 40 LEDs (Module 1)
+  32, 33, 34, 35, 36, 37, 38, 39,   // Row 5 (right to left)
+  31, 30, 29, 28, 27, 26, 25, 24,   // Row 4 (left to right)
+  16, 17, 18, 19, 20, 21, 22, 23,   // Row 3 (right to left)
+  15, 14, 13, 12, 11, 10, 9, 8,     // Row 2 (left to right)
+  0, 1, 2, 3, 4, 5, 6, 7,           // Row 1 (right to left)
+  
+  // Second 40 LEDs (Module 2)
+  40, 41, 42, 43, 44, 45, 46, 47,   // Row 1 (right to left)
+  48, 49, 50, 51, 52, 53, 54, 55,   // Row 2 (left to right)
+  56, 57, 58, 59, 60, 61, 62, 63,   // Row 3 (right to left)
+  64, 65, 66, 67, 68, 69, 70, 71,   // Row 4 (left to right)
+  72, 73, 74, 75, 76, 77, 78, 79    // Row 5 (right to left)
 };
 
 int A_pixels[] = { 0, 1, 2, 3, 4, 5, 9, 10, 11, 12, 13, 14, 15, 19, 20, 24, 25, 29 };
@@ -59,6 +66,8 @@ void setup() {
 
 void loop() {
 
+lightUpColumns(1000); 
+return; 
   // ---  STATE MACHINE --- //
   switch (state) {
     case LOADING:
@@ -117,6 +126,25 @@ void setState(STATES newState) {
   }
 }
 
+// --- DEBUG TEXT --- //
+void lightUpColumns(int wait) {
+  // Loop through all 8 columns (since you have 8 columns in the grid)
+  for (int col = 0; col < 8; col++) {
+    clearGrid();  // Clear the grid before lighting up the next column
+
+    // Loop through all 5 rows (since you have 5 rows)
+    for (int row = 0; row < 5; row++) {
+      // Calculate the index in the serpentine map using the row and column
+      int ledIndex = serpentineMap[row * 8 + col];  // Each row has 8 LEDs, hence row * 8 + col
+      strip.setPixelColor(ledIndex, strip.Color(255, 0, 0));  // Light up the LED in red (you can change the color)
+    }
+
+    strip.show();  // Show the updated LED states
+    delay(wait);   // Wait before lighting the next column
+  }
+}
+
+
 // --- SCROLLING TEXT --- //
 void clearGrid() {
   for (int i = 0; i < LED_COUNT; i++) {
@@ -125,11 +153,13 @@ void clearGrid() {
   strip.show();
 }
 
+
+// Update the scrolling text logic to accommodate the larger matrix size
 void scrollText(String text, int wait) {
   int totalColumns = text.length() * 5; // Each letter is 5 columns wide
 
   // For each step in the scrolling animation (each column shift)
-  for (int scrollPosition = 0; scrollPosition < totalColumns + 5; scrollPosition++) {
+  for (int scrollPosition = 0; scrollPosition < totalColumns + 8; scrollPosition++) { // Adjust to 8 columns per row
     clearGrid();  // Clear the grid before each new frame
 
     // For each character in the text
@@ -142,8 +172,8 @@ void scrollText(String text, int wait) {
       // Determine the starting column for this letter in the grid
       int letterStartPosition = charIndex * 5 - scrollPosition;
 
-      // Only display columns that are currently visible in the 5x6 grid
-      if (letterStartPosition >= -5 && letterStartPosition < 5) {
+      // Only display columns that are currently visible in the 8x5 grid
+      if (letterStartPosition >= -5 && letterStartPosition < 8) {
         // For each pixel of the current letter
         for (int i = 0; i < currentLetterLength; i++) {
           // Calculate the actual grid position using the serpentine map
@@ -151,7 +181,7 @@ void scrollText(String text, int wait) {
           int columnPosition = (currentLetter[i] % 5) + letterStartPosition;
 
           // Check if the column is within the visible grid range
-          if (columnPosition >= 0 && columnPosition < 5) {
+          if (columnPosition >= 0 && columnPosition < 8) {
             strip.setPixelColor(ledIndex, strip.Color(255, 255, 255));  // Turn on the pixel
           }
         }
