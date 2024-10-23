@@ -40,18 +40,36 @@ int serpentineMap[80] = {
 };
 
 
-int A_pixels[] = { 0, 1, 2, 3, 4, 5, 9, 10, 11, 12, 13, 14, 15, 19, 20, 24, 25, 29 };
-int B_pixels[] = { 0, 1, 2, 3, 4, 5, 9, 10, 11, 12, 13, 14, 15, 19, 20, 24, 25, 26, 27, 28, 29 };
-int C_pixels[] = { 0, 1, 2, 3, 4, 5, 10, 15, 20, 25, 26, 27, 28, 29 };
+// 'A' mapped to first module (4x5 grid)
 
-// Define the lengths of each letter pixel array
-int A_length = sizeof(A_pixels) / sizeof(A_pixels[0]);
+int A_pixels[] = {
+  0, 1, 2, 3,              // Top row of 'A'
+  8, 24, 32,               // Right vertical bar of 'A'
+  19, 18, 17, 16,           // Middle bar of 'A'
+  11, 27, 35               // Left vertical bar of 'A'
+};
+
+int B_pixels[] = {
+  0, 1, 2, 3,          // Top bar of 'B'
+  8, 24, 32,           // Left vertical bar of 'B'
+  19, 18, 17, 16,      // Middle bar of 'B'
+  11, 27, 35,          // Right vertical bar of 'B'
+  34, 33      // Bottom bar of 'B'
+};
+
+int C_pixels[] = {
+  0, 1, 2, 3,          // Top bar of 'C'
+  11,19,27,           // Left vertical bar of 'C'
+  35, 34, 33, 32       // Bottom bar of 'C'
+};
+
+// Define lengths of each letter array
 int B_length = sizeof(B_pixels) / sizeof(B_pixels[0]);
 int C_length = sizeof(C_pixels) / sizeof(C_pixels[0]);
 
-// Define a 2D array to hold all letters and their lengths
-int* letters[] = {A_pixels, B_pixels, C_pixels};  // Add all letters
-int letterLengths[] = {A_length, B_length, C_length};  // Add all letter lengths
+
+int A_length = sizeof(A_pixels) / sizeof(A_pixels[0]);
+
 
 void setup() {
 #if defined(__AVR_ATtiny85__) && (F_CPU == 16000000)
@@ -67,7 +85,13 @@ void setup() {
 
 void loop() {
 //lightUpOneByOne(100); 
-lightUpColumns(1000); 
+//lightUpColumns(1000); 
+//highlightRows(1000); 
+
+  displayLetterOnFirstModule('A', 1000);  // Show 'A' for 1 second
+  displayLetterOnFirstModule('B', 1000);  // Show 'B' for 1 second
+  displayLetterOnFirstModule('C', 1000);  // Show 'C' for 1 second
+
 return; 
   // ---  STATE MACHINE --- //
   switch (state) {
@@ -84,7 +108,7 @@ return;
       }
     case SCROLLING_TEXT:
       {
-        scrollText("ABC", 1000);
+        //scrollText("ABC", 1000);
         break;
       }
     case OFF:
@@ -127,42 +151,35 @@ void setState(STATES newState) {
   }
 }
 
-// --- DEBUG GRID --- //
-void lightUpOneByOne(int wait) {
-  // Loop through all 80 LEDs in the serpentineMap
-  for (int i = 0; i < 80; i++) {
-    clearGrid();  // Clear the grid before lighting up the next LED
+// --- DEBUG TEXT --- // 
+void displayLetterOnFirstModule(char letter, int wait) {
+  clearGrid();  // Clear the grid before displaying a letter
+  
+  int* currentLetter;
+  int letterLength;
 
-    // Get the LED index from the serpentine map
-    int ledIndex = serpentineMap[i];
-
-    // Light up the current LED
-    strip.setPixelColor(ledIndex, strip.Color(255, 0, 0));  // Light up in red (you can change color)
-
-    strip.show();  // Show the updated LED states
-    delay(wait);   // Wait before lighting the next LED
+  // Choose the correct letter pixel map
+  if (letter == 'A') {
+    currentLetter = A_pixels;
+    letterLength = A_length;
+  } else if (letter == 'B') {
+    currentLetter = B_pixels;
+    letterLength = B_length;
+  } else if (letter == 'C') {
+    currentLetter = C_pixels;
+    letterLength = C_length;
   }
+
+  // Display each pixel of the current letter on the first module
+  for (int i = 0; i < letterLength; i++) {
+    int ledIndex = serpentineMap[currentLetter[i]];  // Map the letter's pixels to the serpentine layout
+    strip.setPixelColor(ledIndex, strip.Color(255, 255, 255));  // Set pixel color to white
+  }
+
+  strip.show();  // Show the updated LED states
+  delay(wait);   // Wait for a specified time before clearing or updating the grid
 }
 
-
-void lightUpColumns(int wait) {
-  // Loop through all 16 columns (since you have 8 columns per module and 2 modules)
-  for (int col = 0; col < 16; col++) {
-    clearGrid();  // Clear the grid before lighting up the next column
-
-    // Loop through all 5 rows (since you have 5 rows)
-    for (int row = 0; row < 5; row++) {
-      // Calculate the index in the serpentine map using the row and column
-      // For the first 8 columns (module 1), row * 8 + col works
-      // For the next 8 columns (module 2), adjust the column index to continue
-      int ledIndex = serpentineMap[row * 8 + (col % 8) + (col / 8) * 40];
-      strip.setPixelColor(ledIndex, strip.Color(255, 0, 0));  // Light up the LED in red (you can change the color)
-    }
-
-    strip.show();  // Show the updated LED states
-    delay(wait);   // Wait before lighting the next column
-  }
-}
 
 
 // --- SCROLLING TEXT --- //
@@ -173,45 +190,6 @@ void clearGrid() {
   strip.show();
 }
 
-
-// Update the scrolling text logic to accommodate the larger matrix size
-void scrollText(String text, int wait) {
-  int totalColumns = text.length() * 5; // Each letter is 5 columns wide
-
-  // For each step in the scrolling animation (each column shift)
-  for (int scrollPosition = 0; scrollPosition < totalColumns + 8; scrollPosition++) { // Adjust to 8 columns per row
-    clearGrid();  // Clear the grid before each new frame
-
-    // For each character in the text
-    for (int charIndex = 0; charIndex < text.length(); charIndex++) {
-      char c = text[charIndex];
-      int letterIndex = c - 'A';  // Map character to letter array
-      int* currentLetter = letters[letterIndex];  // Get current letter pixel data
-      int currentLetterLength = letterLengths[letterIndex];  // Get the letter's length
-
-      // Determine the starting column for this letter in the grid
-      int letterStartPosition = charIndex * 5 - scrollPosition;
-
-      // Only display columns that are currently visible in the 8x5 grid
-      if (letterStartPosition >= -5 && letterStartPosition < 8) {
-        // For each pixel of the current letter
-        for (int i = 0; i < currentLetterLength; i++) {
-          // Calculate the actual grid position using the serpentine map
-          int ledIndex = serpentineMap[currentLetter[i] % LED_COUNT];
-          int columnPosition = (currentLetter[i] % 5) + letterStartPosition;
-
-          // Check if the column is within the visible grid range
-          if (columnPosition >= 0 && columnPosition < 8) {
-            strip.setPixelColor(ledIndex, strip.Color(255, 255, 255));  // Turn on the pixel
-          }
-        }
-      }
-    }
-
-    strip.show();  // Update the strip with the new frame
-    delay(wait);   // Wait before moving to the next frame
-  }
-}
 
 
 // --- ANIMATIONS --- //
