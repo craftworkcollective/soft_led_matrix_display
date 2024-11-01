@@ -98,8 +98,8 @@ void loop() {
   //displayLetterOnFirstModule('C', 1000);  // Show 'C' for 1 second
   //displayStringOnFirstModule("AB", 1000);
 
-  //scrollText("A", 1000);
-  scrollLetterA(500);
+  scrollText("A", 300);
+  //scrollLetterA(500);
   return;
 
 
@@ -298,62 +298,61 @@ void scrollLetterA(int wait) {
   }
 }
 
-
-
-
-
 void scrollText(String text, int wait) {
-  int totalColumns = text.length() * 4;  // Each letter is 4 columns wide
+  int letterWidth = 4;           // Each letter is 4 columns wide
+  int numColumns = 16;           // Total columns for both modules
+  int totalColumns = text.length() * letterWidth;  // Calculate total width of the text in columns
 
-  // Scroll right to left across 16 columns (both modules)
-  for (int scrollPosition = 0; scrollPosition < totalColumns + 16; scrollPosition++) {  // Start at 0 for smooth scrolling from right to left
-    clearGrid();                                                                        // Clear the grid before each new frame
+  // Scroll the entire text from right to left across both modules
+  for (int scrollPosition = -totalColumns - numColumns; scrollPosition <= numColumns; scrollPosition++) {
+  // for (int scrollPosition = totalColumns + numColumns; scrollPosition >= -numColumns; scrollPosition--) {
+ 
+    clearGrid();  // Clear the grid before each new frame
 
     // Loop through each character in the text
     for (int charIndex = 0; charIndex < text.length(); charIndex++) {
       char letter = text[charIndex];             // Get the current letter
       int letterIndex = getLetterIndex(letter);  // Get the index of the letter in the alphabet array
 
-      // Get the corresponding letter pixel array and its length
+      // Retrieve the pixel map and length for the current letter
       int* currentLetter = alphabetPixels[letterIndex];
       int letterLength = alphabetLengths[letterIndex];
 
-      // Calculate the starting column for this letter, taking into account scroll position
-      int letterStartPosition = (charIndex * 4) - scrollPosition;  // Adjust for right-to-left scrolling
+      // Calculate the starting column for this letter in the scroll
+      int letterStartPosition = (charIndex * letterWidth) + scrollPosition;
 
       // Loop through each pixel in the current letter
       for (int i = 0; i < letterLength; i++) {
-        int columnOffset = i % 4;                              // Column position within the letter
-        int pixelColumn = letterStartPosition + columnOffset;  // Overall position in the scrolling grid
+        int columnOffset = alphabetPixels[letterIndex][i] % letterWidth;                      // Column position within the letter
+        int pixelColumn = letterStartPosition + columnOffset;    // Scrolling column position
 
-        // Only display pixels that are within the visible grid (0 to 15 columns)
-        if (pixelColumn >= 0 && pixelColumn < 16) {
-          int row = currentLetter[i] / 8;     // Determine the row of the pixel (each row has 8 LEDs)
-          int column = currentLetter[i] % 8;  // Determine the column of the pixel within that row
+        // Only display pixels within the visible grid (0 to 15 columns)
+        if (pixelColumn >= 0 && pixelColumn < numColumns) {
+          int ledIndex;
 
-          // Calculate the correct index in the serpentine map based on the row and column
-          int serpentineIndex;
-          if (row % 2 == 0) {
-            // If row is even, left to right
-            serpentineIndex = row * 8 + column;
+          // Determine if the pixel is in the first or second module
+          if (pixelColumn < 8) {
+            // First module (columns 0-7)
+            ledIndex = currentLetter[i] + letterStartPosition;
           } else {
-            // If row is odd, right to left
-            serpentineIndex = row * 8 + (7 - column);
+            // Second module (columns 8-15)
+            ledIndex = currentLetter[i] + letterStartPosition + 32;  // Offset by 32 for the second module
           }
 
-          // Ensure serpentineIndex is within bounds of the 80 LEDs
-          if (serpentineIndex >= 0 && serpentineIndex < 80) {
-            int mappedIndex = serpentineMap[serpentineIndex];              // Map to the correct LED in the serpentine layout
+          // Map to the correct LED in the serpentine layout
+          if (ledIndex >= 0 && ledIndex < 80) {
+            int mappedIndex = serpentineMap[ledIndex];
             strip.setPixelColor(mappedIndex, strip.Color(255, 255, 255));  // Set pixel color to white
           }
         }
       }
     }
 
-    strip.show();  // Update the strip with the new frame
+    strip.show();  // Show the updated LED states
     delay(wait);   // Wait before moving to the next frame
   }
 }
+
 
 
 int getLetterIndex(char letter) {
