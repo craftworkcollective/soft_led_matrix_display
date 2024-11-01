@@ -99,7 +99,7 @@ void loop() {
   //displayStringOnFirstModule("AB", 1000);
 
   //scrollText("A", 1000);
-  scrollLetterA(1000);
+  scrollLetterA(500);
   return;
 
 
@@ -267,25 +267,31 @@ void scrollLetterA(int wait) {
   int letterWidth = 4;  // The width of the letter 'A'
 
   // Scroll from right to left across 16 columns
-  for (int scrollPosition = -letterWidth; scrollPosition <= 8; scrollPosition++) {
-  clearGrid();  // Clear the grid before each new frame
+  for (int scrollPosition = -letterWidth; scrollPosition <= 16; scrollPosition++) {
+    clearGrid();  // Clear the grid before each new frame
 
-  // Loop through each pixel in the letter 'A'
-  for (int i = 0; i < A_length; i++) {
-    int columnOffset = A_pixels[i] % 4;                         // Column position within the letter 'A'
-    int pixelColumn = scrollPosition + columnOffset;  // Overall position in the scrolling grid
+    // Loop through each pixel in the letter 'A'
+    for (int i = 0; i < A_length; i++) {
+      int columnOffset = A_pixels[i] % 4;               // Column position within the letter 'A'
+      int pixelColumn = scrollPosition + columnOffset;  // Overall position in the scrolling grid
 
-    // Only display pixels that are within the visible grid (0 to 15 columns)
-    if (pixelColumn >= 0 && pixelColumn < 8) {
-      int ledIndex = A_pixels[i] + scrollPosition;  // Get the pixel index with scroll offset
+      // FIRST MODULE
+      int ledIndex;
+      if (pixelColumn >= 0 && pixelColumn < 8) {
+        ledIndex = A_pixels[i] + scrollPosition;  // Get the pixel index with scroll offset
+      } else if (pixelColumn >= 8 && pixelColumn < 16) {
+        ledIndex = A_pixels[i] + scrollPosition  + 32;  // Get the pixel index with scroll offset
+      }
 
-      // Ensure the index is within bounds of the 80 LEDs
-      if (ledIndex >= 0 && ledIndex < 40) {
-        int mappedIndex = serpentineMap[ledIndex];                 // Map to the correct LED in the serpentine layout
-        strip.setPixelColor(mappedIndex, strip.Color(0, 255, 0));  // Set pixel color to red
+      if (pixelColumn >= 0 && pixelColumn < 16) {
+        if (ledIndex >= 0 && ledIndex < 80) {
+          int mappedIndex = serpentineMap[ledIndex];                 // Map to the correct LED in the serpentine layout
+          strip.setPixelColor(mappedIndex, strip.Color(0, 255, 0));  // Set pixel color to red
+        }
       }
     }
-    }
+
+
 
     strip.show();
     delay(wait);  // Wait before moving to the next frame
