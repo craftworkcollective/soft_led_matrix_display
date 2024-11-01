@@ -25,42 +25,42 @@ float attractDuration = 2.0 * 1000.0;
 // --- SCROLLING TEXT --- //
 int serpentineMap[80] = {
   // First 40 LEDs (Module 1)
-  32, 33, 34, 35, 36, 37, 38, 39,   // Row 5 (right to left)
-  31, 30, 29, 28, 27, 26, 25, 24,   // Row 4 (left to right)
-  16, 17, 18, 19, 20, 21, 22, 23,   // Row 3 (right to left)
-  15, 14, 13, 12, 11, 10, 9, 8,     // Row 2 (left to right)
-  0, 1, 2, 3, 4, 5, 6, 7,           // Row 1 (right to left)
-  
+  32, 33, 34, 35, 36, 37, 38, 39,  // Row 5 (right to left)
+  31, 30, 29, 28, 27, 26, 25, 24,  // Row 4 (left to right)
+  16, 17, 18, 19, 20, 21, 22, 23,  // Row 3 (right to left)
+  15, 14, 13, 12, 11, 10, 9, 8,    // Row 2 (left to right)
+  0, 1, 2, 3, 4, 5, 6, 7,          // Row 1 (right to left)
+
   // Second 40 LEDs (Module 2)
-  40, 41, 42, 43, 44, 45, 46, 47,   // Row 1 (left to right)
-  55, 54, 53, 52, 51, 50, 49, 48,   // Row 2 (right to left)
-  56, 57, 58, 59, 60, 61, 62, 63,   // Row 3 (left to right)
-  71, 70, 69, 68, 67, 66, 65, 64,   // Row 4 (right to left)
-  72, 73, 74, 75, 76, 77, 78, 79    // Row 5 (left to right)
+  40, 41, 42, 43, 44, 45, 46, 47,  // Row 1 (left to right)
+  55, 54, 53, 52, 51, 50, 49, 48,  // Row 2 (right to left)
+  56, 57, 58, 59, 60, 61, 62, 63,  // Row 3 (left to right)
+  71, 70, 69, 68, 67, 66, 65, 64,  // Row 4 (right to left)
+  72, 73, 74, 75, 76, 77, 78, 79   // Row 5 (left to right)
 };
 
 
 // 'A' mapped to first module (4x5 grid)
 
 int A_pixels[] = {
-  0, 1, 2, 3,              // Top row of 'A'
-  8, 24, 32,               // Right vertical bar of 'A'
-  19, 18, 17, 16,           // Middle bar of 'A'
-  11, 27, 35               // Left vertical bar of 'A'
+  0, 1, 2, 3,      // Top row of 'A'
+  8, 24, 32,       // Right vertical bar of 'A'
+  19, 18, 17, 16,  // Middle bar of 'A'
+  11, 27, 35       // Left vertical bar of 'A'
 };
 
 int B_pixels[] = {
-  0, 1, 2, 3,          // Top bar of 'B'
-  8, 24, 32,           // Left vertical bar of 'B'
-  19, 18, 17, 16,      // Middle bar of 'B'
-  11, 27, 35,          // Right vertical bar of 'B'
-  34, 33      // Bottom bar of 'B'
+  0, 1, 2, 3,      // Top bar of 'B'
+  8, 24, 32,       // Left vertical bar of 'B'
+  19, 18, 17, 16,  // Middle bar of 'B'
+  11, 27, 35,      // Right vertical bar of 'B'
+  34, 33           // Bottom bar of 'B'
 };
 
 int C_pixels[] = {
-  0, 1, 2, 3,          // Top bar of 'C'
-  11,19,27,           // Left vertical bar of 'C'
-  35, 34, 33, 32       // Bottom bar of 'C'
+  0, 1, 2, 3,     // Top bar of 'C'
+  11, 19, 27,     // Left vertical bar of 'C'
+  35, 34, 33, 32  // Bottom bar of 'C'
 };
 
 // Define lengths of each letter array
@@ -89,19 +89,20 @@ void setup() {
 }
 
 void loop() {
-//lightUpOneByOne(100); 
-//lightUpColumns(1000); 
-//highlightRows(1000); 
+  //lightUpOneByOne(100);
+  //lightUpColumns(1000);
+  //highlightRows(1000);
 
   //displayLetterOnFirstModule('A', 1000);  // Show 'A' for 1 second
   //displayLetterOnFirstModule('B', 1000);  // Show 'B' for 1 second
   //displayLetterOnFirstModule('C', 1000);  // Show 'C' for 1 second
   //displayStringOnFirstModule("AB", 1000);
 
-//scrollText("A", 1000);
- scrollLetterA(1000);
+  //scrollText("A", 1000);
+  scrollLetterA(1000);
+  return;
 
-return; 
+
   // ---  STATE MACHINE --- //
   switch (state) {
     case LOADING:
@@ -160,7 +161,7 @@ void setState(STATES newState) {
   }
 }
 
-// --- DEBUG TEXT --- // 
+// --- DEBUG TEXT --- //
 void displayStringOnFirstModule(String text, int wait) {
   clearGrid();  // Clear the grid before displaying the string
 
@@ -186,7 +187,7 @@ void displayStringOnFirstModule(String text, int wait) {
 
     // Display each pixel of the current letter
     for (int i = 0; i < letterLength; i++) {
-      int ledIndex = serpentineMap[currentLetter[i] + offset];  // Shift letter by 4 columns per letter
+      int ledIndex = serpentineMap[currentLetter[i] + offset];    // Shift letter by 4 columns per letter
       strip.setPixelColor(ledIndex, strip.Color(255, 255, 255));  // Set pixel color to white
     }
   }
@@ -197,7 +198,7 @@ void displayStringOnFirstModule(String text, int wait) {
 
 void displayLetterOnFirstModule(char letter, int wait) {
   clearGrid();  // Clear the grid before displaying a letter
-  
+
   int* currentLetter;
   int letterLength;
 
@@ -215,7 +216,7 @@ void displayLetterOnFirstModule(char letter, int wait) {
 
   // Display each pixel of the current letter on the first module
   for (int i = 0; i < letterLength; i++) {
-    int ledIndex = serpentineMap[currentLetter[i]];  // Map the letter's pixels to the serpentine layout
+    int ledIndex = serpentineMap[currentLetter[i]];             // Map the letter's pixels to the serpentine layout
     strip.setPixelColor(ledIndex, strip.Color(255, 255, 255));  // Set pixel color to white
   }
 
@@ -230,7 +231,7 @@ void lightUpColumns(int wait) {
     // Loop through all 5 rows (since you have 5 rows)
     for (int row = 0; row < 5; row++) {
       // Calculate the index in the serpentine map using the row and column
-      int ledIndex = serpentineMap[row * 8 + col];  // Each row has 8 LEDs, hence row * 8 + col
+      int ledIndex = serpentineMap[row * 8 + col];            // Each row has 8 LEDs, hence row * 8 + col
       strip.setPixelColor(ledIndex, strip.Color(255, 0, 0));  // Light up the LED in red (you can change the color)
     }
     strip.show();  // Show the updated LED states
@@ -246,14 +247,14 @@ void lightUpOneByOne(int wait) {
     int ledIndex = serpentineMap[i];
     // Light up the current LED
     strip.setPixelColor(ledIndex, strip.Color(255, 0, 0));  // Light up in red (you can change color)
-    strip.show();  // Show the updated LED states
-    delay(wait);   // Wait before lighting the next LED
+    strip.show();                                           // Show the updated LED states
+    delay(wait);                                            // Wait before lighting the next LED
   }
 }
 
 void lightUpSerpentineGrid() {
   for (int i = 0; i < 80; i++) {
-    int mappedIndex = serpentineMap[i];  // Get the correct LED index from the serpentine map
+    int mappedIndex = serpentineMap[i];                            // Get the correct LED index from the serpentine map
     strip.setPixelColor(mappedIndex, strip.Color(255, 255, 255));  // Set each pixel to white
   }
 
@@ -261,29 +262,29 @@ void lightUpSerpentineGrid() {
   delay(2000);   // Keep them lit for 2 seconds
 }
 
-// --- SCROLLING TEXT --- 
+// --- SCROLLING TEXT ---
 void scrollLetterA(int wait) {
   int letterWidth = 4;  // The width of the letter 'A'
 
   // Scroll from right to left across 16 columns
-  for (int scrollPosition = -letterWidth; scrollPosition <= 16; scrollPosition++) {
-    clearGrid();  // Clear the grid before each new frame
+  for (int scrollPosition = -letterWidth; scrollPosition <= 8; scrollPosition++) {
+  clearGrid();  // Clear the grid before each new frame
 
-    // Loop through each pixel in the letter 'A'
-    for (int i = 0; i < A_length; i++) {
-      int columnOffset = i % 4;  // Column position within the letter 'A'
-      int pixelColumn = scrollPosition + columnOffset;  // Overall position in the scrolling grid
+  // Loop through each pixel in the letter 'A'
+  for (int i = 0; i < A_length; i++) {
+    int columnOffset = A_pixels[i] % 4;                         // Column position within the letter 'A'
+    int pixelColumn = scrollPosition + columnOffset;  // Overall position in the scrolling grid
 
-      // Only display pixels that are within the visible grid (0 to 15 columns)
-      if (pixelColumn >= 0 && pixelColumn < 16) {
-        int ledIndex = A_pixels[i] + scrollPosition;  // Get the pixel index with scroll offset
+    // Only display pixels that are within the visible grid (0 to 15 columns)
+    if (pixelColumn >= 0 && pixelColumn < 8) {
+      int ledIndex = A_pixels[i] + scrollPosition;  // Get the pixel index with scroll offset
 
-        // Ensure the index is within bounds of the 80 LEDs
-        if (ledIndex >= 0 && ledIndex < 80) {
-          int mappedIndex = serpentineMap[ledIndex];  // Map to the correct LED in the serpentine layout
-          strip.setPixelColor(mappedIndex, strip.Color(255, 0, 0));  // Set pixel color to red
-        }
+      // Ensure the index is within bounds of the 80 LEDs
+      if (ledIndex >= 0 && ledIndex < 40) {
+        int mappedIndex = serpentineMap[ledIndex];                 // Map to the correct LED in the serpentine layout
+        strip.setPixelColor(mappedIndex, strip.Color(0, 255, 0));  // Set pixel color to red
       }
+    }
     }
 
     strip.show();
@@ -300,11 +301,11 @@ void scrollText(String text, int wait) {
 
   // Scroll right to left across 16 columns (both modules)
   for (int scrollPosition = 0; scrollPosition < totalColumns + 16; scrollPosition++) {  // Start at 0 for smooth scrolling from right to left
-    clearGrid();  // Clear the grid before each new frame
+    clearGrid();                                                                        // Clear the grid before each new frame
 
     // Loop through each character in the text
     for (int charIndex = 0; charIndex < text.length(); charIndex++) {
-      char letter = text[charIndex];  // Get the current letter
+      char letter = text[charIndex];             // Get the current letter
       int letterIndex = getLetterIndex(letter);  // Get the index of the letter in the alphabet array
 
       // Get the corresponding letter pixel array and its length
@@ -316,12 +317,12 @@ void scrollText(String text, int wait) {
 
       // Loop through each pixel in the current letter
       for (int i = 0; i < letterLength; i++) {
-        int columnOffset = i % 4;  // Column position within the letter
+        int columnOffset = i % 4;                              // Column position within the letter
         int pixelColumn = letterStartPosition + columnOffset;  // Overall position in the scrolling grid
 
         // Only display pixels that are within the visible grid (0 to 15 columns)
         if (pixelColumn >= 0 && pixelColumn < 16) {
-          int row = currentLetter[i] / 8;  // Determine the row of the pixel (each row has 8 LEDs)
+          int row = currentLetter[i] / 8;     // Determine the row of the pixel (each row has 8 LEDs)
           int column = currentLetter[i] % 8;  // Determine the column of the pixel within that row
 
           // Calculate the correct index in the serpentine map based on the row and column
@@ -336,7 +337,7 @@ void scrollText(String text, int wait) {
 
           // Ensure serpentineIndex is within bounds of the 80 LEDs
           if (serpentineIndex >= 0 && serpentineIndex < 80) {
-            int mappedIndex = serpentineMap[serpentineIndex];  // Map to the correct LED in the serpentine layout
+            int mappedIndex = serpentineMap[serpentineIndex];              // Map to the correct LED in the serpentine layout
             strip.setPixelColor(mappedIndex, strip.Color(255, 255, 255));  // Set pixel color to white
           }
         }
