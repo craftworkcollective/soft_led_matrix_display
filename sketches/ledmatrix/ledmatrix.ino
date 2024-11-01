@@ -63,13 +63,16 @@ int C_pixels[] = {
   35, 34, 33, 32  // Bottom bar of 'C'
 };
 
+int space_pixels[] = {};
+
 // Define lengths of each letter array
 int A_length = sizeof(A_pixels) / sizeof(A_pixels[0]);
 int B_length = sizeof(B_pixels) / sizeof(B_pixels[0]);
 int C_length = sizeof(C_pixels) / sizeof(C_pixels[0]);
+int space_length = sizeof(C_pixels) / sizeof(space_pixels[0]);
 
 // Create an array of pointers to each letter's pixel array
-int* alphabetPixels[] = { A_pixels, B_pixels, C_pixels };  // You can expand this with more letters
+int* alphabetPixels[] = { A_pixels, B_pixels, C_pixels, space_length };  // You can expand this with more letters
 
 // Create an array of lengths for each letter's pixel array
 int alphabetLengths[] = { A_length, B_length, C_length };
@@ -98,7 +101,7 @@ void loop() {
   //displayLetterOnFirstModule('C', 1000);  // Show 'C' for 1 second
   //displayStringOnFirstModule("AB", 1000);
 
-  scrollText("AB", 500);
+  scrollText("AB C", 500);
   //scrollLetterA(500);
   return;
 
@@ -280,7 +283,7 @@ void scrollLetterA(int wait) {
       if (pixelColumn >= 0 && pixelColumn < 8) {
         ledIndex = A_pixels[i] + scrollPosition;  // Get the pixel index with scroll offset
       } else if (pixelColumn >= 8 && pixelColumn < 16) {
-        ledIndex = A_pixels[i] + scrollPosition  + 32;  // Get the pixel index with scroll offset
+        ledIndex = A_pixels[i] + scrollPosition + 32;  // Get the pixel index with scroll offset
       }
 
       if (pixelColumn >= 0 && pixelColumn < 16) {
@@ -307,12 +310,12 @@ String reverseString(String input) {
 }
 
 void scrollText(String text, int wait) {
-  int letterWidth = 5;           // Each letter is now 5 columns wide (4 for pixels, 1 for spacing)
-  int numColumns = 16;           // Total columns for both modules
+  int letterWidth = 5;                             // Each letter is now 5 columns wide (4 for pixels, 1 for spacing)
+  int numColumns = 16;                             // Total columns for both modules
   int totalColumns = text.length() * letterWidth;  // Calculate total width of the text in columns
-  
+
   text = reverseString(text);
-  
+
   // Scroll the entire text from right to left across both modules
   for (int scrollPosition = -totalColumns - numColumns; scrollPosition <= numColumns; scrollPosition++) {
     clearGrid();  // Clear the grid before each new frame
@@ -332,7 +335,7 @@ void scrollText(String text, int wait) {
       // Loop through each pixel in the current letter
       for (int i = 0; i < letterLength; i++) {
         int columnOffset = alphabetPixels[letterIndex][i] % 4;  // Column position within the letter (still 4-pixel width)
-        int pixelColumn = letterStartPosition + columnOffset;    // Scrolling column position
+        int pixelColumn = letterStartPosition + columnOffset;   // Scrolling column position
 
         // Only display pixels within the visible grid (0 to 15 columns)
         if (pixelColumn >= 0 && pixelColumn < numColumns) {
@@ -364,7 +367,10 @@ void scrollText(String text, int wait) {
 
 
 int getLetterIndex(char letter) {
-  return letter - 'A';  // Returns 0 for 'A', 1 for 'B', etc.
+  if (letter == " ")
+    return 4;
+  else
+    return letter - 'A';  // Returns 0 for 'A', 1 for 'B', etc.
 }
 
 void clearGrid() {
