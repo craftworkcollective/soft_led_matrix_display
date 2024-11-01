@@ -63,19 +63,236 @@ int C_pixels[] = {
   35, 34, 33, 32  // Bottom bar of 'C'
 };
 
-int space_pixels[] = {};
+int D_pixels[] = {
+  0, 1, 2, 3,       // Top bar of 'D'
+  11, 19, 27, 35,   // Right vertical bar of 'D'
+  34, 33, 32,       // Bottom bar of 'D'
+  0, 8, 16, 24      // Left vertical bar of 'D'
+};
+
+int E_pixels[] = {
+  0, 1, 2, 3,       // Top bar of 'E'
+  11,               // Upper left segment of 'E'
+  16, 17, 18, 19,   // Middle bar of 'E'
+  27,               // Lower left segment of 'E'
+  32, 33, 34, 35    // Bottom bar of 'E'
+};
+
+int F_pixels[] = {
+  0, 1, 2, 3,       // Top bar of 'F'
+  11,               // Upper left segment of 'F'
+  16, 17, 18, 19,   // Middle bar of 'F'
+  27,               // Lower left segment of 'F'
+  35                // Bottom left segment of 'F'
+};
+
+int G_pixels[] = {
+  0, 1, 2, 3,       // Top bar of 'G'
+  11,               // Upper left segment of 'G'
+  16, 17, 19,       // Middle segment of 'G'
+  24, 27,           // Lower middle segment of 'G'
+  32, 33, 34, 35    // Bottom bar of 'G'
+};
+
+int H_pixels[] = {
+  0, 3,             // Top left and right segments of 'H'
+  8, 11,            // Upper middle left and right segments of 'H'
+  16, 17, 18, 19,   // Middle bar of 'H'
+  24, 27,           // Lower middle left and right segments of 'H'
+  32, 35            // Bottom left and right segments of 'H'
+};
+
+int I_pixels[] = {
+  1, 2,             // Top bar of 'I'
+  9, 10,            // Upper middle segment of 'I'
+  17, 18,           // Middle segment of 'I'
+  25, 26,           // Lower middle segment of 'I'
+  33, 34            // Bottom bar of 'I'
+};
+
+
+int J_pixels[] = {
+  0,               // Top right segment of 'J'
+  8,               // Upper middle right segment of 'J'
+  16, 19,          // Middle right and left segments of 'J'
+  24, 27,          // Lower middle right and left segments of 'J'
+  32, 33, 34, 35   // Bottom bar of 'J'
+};
+
+int K_pixels[] = {
+  0, 3,             // Top left and right segments of 'K'
+  9, 11,            // Upper middle diagonal segments of 'K'
+  18, 19,           // Middle segment of 'K'
+  25, 27,           // Lower middle diagonal segments of 'K'
+  32, 35            // Bottom left and right segments of 'K'
+};
+
+int L_pixels[] = {
+  3,               // Top left segment of 'L'
+  11,              // Upper middle left segment of 'L'
+  19,              // Middle left segment of 'L'
+  27,              // Lower middle left segment of 'L'
+  32, 33, 34, 35   // Bottom bar of 'L'
+};
+
+int M_pixels[] = {
+  0, 3,                    // Top left and right segments of 'M'
+  8, 9, 10, 11,            // Second row with inner peak of 'M'
+  16, 19,                  // Middle row left and right segments of 'M'
+  24, 27,                  // Lower middle left and right segments of 'M'
+  32, 35                   // Bottom left and right segments of 'M'
+};
+
+
+int N_pixels[] = {
+  0, 3,             // Top left and right segments of 'N'
+  8, 11,            // Upper middle left and right segments of 'N'
+  16, 18, 19,       // Middle diagonal from left to right of 'N'
+  24, 25, 27,       // Lower middle diagonal of 'N'
+  32, 35            // Bottom left and right segments of 'N'
+};
+
+int O_pixels[] = {
+  0, 1, 2, 3,       // Top bar of 'O'
+  8, 11,            // Upper left and right segments of 'O'
+  16, 19,           // Middle left and right segments of 'O'
+  24, 27,           // Lower middle left and right segments of 'O'
+  32, 33, 34, 35    // Bottom bar of 'O'
+};
+
+int P_pixels[] = {
+  0, 1, 2, 3,       // Top bar of 'P'
+  8, 11,            // Upper left and right segments of 'P'
+  16, 17, 18, 19,   // Middle bar of 'P'
+  27,               // Lower left segment of 'P'
+  35                // Bottom left segment of 'P'
+};
+
+int Q_pixels[] = {
+  0, 1, 2, 3,       // Top bar of 'Q'
+  8, 11,            // Upper left and right segments of 'Q'
+  17, 19,           // Middle left and right segments of 'Q'
+  25, 27,           // Lower middle left and right segments of 'Q'
+  32, 33, 34, 35    // Bottom bar of 'Q'
+};
+
+int R_pixels[] = {
+  0, 1, 2, 3,       // Top bar of 'R'
+  8, 11,            // Upper left and right segments of 'R'
+  16, 17, 18, 19,   // Middle bar of 'R'
+  25, 27,           // Lower middle diagonal of 'R'
+  32, 35            // Bottom left and right segments of 'R'
+};
+
+int S_pixels[] = {
+  0, 1, 2, 3,       // Top bar of 'S'
+  11,               // Upper left segment of 'S'
+  16, 17, 18, 19,   // Middle bar of 'S'
+  24,               // Lower right segment of 'S'
+  32, 33, 34, 35    // Bottom bar of 'S'
+};
+
+int T_pixels[] = {
+  0, 1, 2, 3,       // Top bar of 'T'
+  9,                // Upper middle segment of 'T'
+  17,               // Middle segment of 'T'
+  25,               // Lower middle segment of 'T'
+  33                // Bottom middle segment of 'T'
+};
+
+int U_pixels[] = {
+  0, 3,             // Top left and right segments of 'U'
+  8, 11,            // Upper middle left and right segments of 'U'
+  16, 19,           // Middle left and right segments of 'U'
+  24, 27,           // Lower middle left and right segments of 'U'
+  32, 33, 34, 35    // Bottom bar of 'U'
+};
+
+int V_pixels[] = {
+  0, 3,             // Top left and right segments of 'V'
+  8, 11,            // Upper middle left and right segments of 'V'
+  16, 19,           // Middle left and right segments of 'V'
+  24, 25, 26, 27,   // Lower middle bar of 'V'
+  33, 34            // Bottom left and right segments of 'V'
+};
+
+int W_pixels[] = {
+  0, 3,             // Top left and right segments of 'W'
+  8, 11,            // Upper middle left and right segments of 'W'
+  16, 19,           // Middle left and right segments of 'W'
+  24, 25, 26, 27,   // Lower middle bar of 'W'
+  32, 35            // Bottom left and right segments of 'W'
+};
+
+int X_pixels[] = {
+  3,                // Top left segment of 'X'
+  8, 10,            // Upper middle left and right segments of 'X'
+  17,               // Middle segment of 'X'
+  24, 26,           // Lower middle left and right segments of 'X'
+  35                // Bottom right segment of 'X'
+};
+
+int Y_pixels[] = {
+  0, 3,             // Top left and right segments of 'Y'
+  8, 11,            // Upper middle left and right segments of 'Y'
+  17, 18,           // Middle segment of 'Y'
+  25, 26,           // Lower middle segment of 'Y'
+  33, 34            // Bottom left and right segments of 'Y'
+};
+
+int Z_pixels[] = {
+  0, 1, 2, 3,       // Top bar of 'Z'
+  9,                // Upper middle segment of 'Z'
+  18,               // Middle segment of 'Z'
+  27,               // Lower middle segment of 'Z'
+  32, 33, 34, 35    // Bottom bar of 'Z'
+};
+
+
+
+// Define the pixel arrays for each letter (A-Z) and space
+int space_pixels[] = {};  // Empty space
 
 // Define lengths of each letter array
 int A_length = sizeof(A_pixels) / sizeof(A_pixels[0]);
 int B_length = sizeof(B_pixels) / sizeof(B_pixels[0]);
 int C_length = sizeof(C_pixels) / sizeof(C_pixels[0]);
-int space_length = sizeof(C_pixels) / sizeof(space_pixels[0]);
+int D_length = sizeof(D_pixels) / sizeof(D_pixels[0]);
+int E_length = sizeof(E_pixels) / sizeof(E_pixels[0]);
+int F_length = sizeof(F_pixels) / sizeof(F_pixels[0]);
+int G_length = sizeof(G_pixels) / sizeof(G_pixels[0]);
+int H_length = sizeof(H_pixels) / sizeof(H_pixels[0]);
+int I_length = sizeof(I_pixels) / sizeof(I_pixels[0]);
+int J_length = sizeof(J_pixels) / sizeof(J_pixels[0]);
+int K_length = sizeof(K_pixels) / sizeof(K_pixels[0]);
+int L_length = sizeof(L_pixels) / sizeof(L_pixels[0]);
+int M_length = sizeof(M_pixels) / sizeof(M_pixels[0]);
+int N_length = sizeof(N_pixels) / sizeof(N_pixels[0]);
+int O_length = sizeof(O_pixels) / sizeof(O_pixels[0]);
+int P_length = sizeof(P_pixels) / sizeof(P_pixels[0]);
+int Q_length = sizeof(Q_pixels) / sizeof(Q_pixels[0]);
+int R_length = sizeof(R_pixels) / sizeof(R_pixels[0]);
+int S_length = sizeof(S_pixels) / sizeof(S_pixels[0]);
+int T_length = sizeof(T_pixels) / sizeof(T_pixels[0]);
+int U_length = sizeof(U_pixels) / sizeof(U_pixels[0]);
+int V_length = sizeof(V_pixels) / sizeof(V_pixels[0]);
+int W_length = sizeof(W_pixels) / sizeof(W_pixels[0]);
+int X_length = sizeof(X_pixels) / sizeof(X_pixels[0]);
+int Y_length = sizeof(Y_pixels) / sizeof(Y_pixels[0]);
+int Z_length = sizeof(Z_pixels) / sizeof(Z_pixels[0]);
+int space_length = sizeof(space_pixels) / sizeof(space_pixels[0]);
 
 // Create an array of pointers to each letter's pixel array
-int* alphabetPixels[] = { A_pixels, B_pixels, C_pixels, space_length };  // You can expand this with more letters
+int* alphabetPixels[] = { A_pixels, B_pixels, C_pixels, D_pixels, E_pixels, F_pixels, G_pixels, 
+                          H_pixels, I_pixels, J_pixels, K_pixels, L_pixels, M_pixels, N_pixels, 
+                          O_pixels, P_pixels, Q_pixels, R_pixels, S_pixels, T_pixels, U_pixels, 
+                          V_pixels, W_pixels, X_pixels, Y_pixels, Z_pixels, space_pixels };
 
 // Create an array of lengths for each letter's pixel array
-int alphabetLengths[] = { A_length, B_length, C_length };
+int alphabetLengths[] = { A_length, B_length, C_length, D_length, E_length, F_length, G_length, 
+                          H_length, I_length, J_length, K_length, L_length, M_length, N_length, 
+                          O_length, P_length, Q_length, R_length, S_length, T_length, U_length, 
+                          V_length, W_length, X_length, Y_length, Z_length, space_length };
 
 
 void setup() {
@@ -101,7 +318,7 @@ void loop() {
   //displayLetterOnFirstModule('C', 1000);  // Show 'C' for 1 second
   //displayStringOnFirstModule("AB", 1000);
 
-  scrollText("AB C", 500);
+  scrollText("ABCDEFGHIJKLMNOPQRSTUVWXYZ", 500);
   //scrollLetterA(500);
   return;
 
