@@ -98,7 +98,7 @@ void loop() {
   //displayLetterOnFirstModule('C', 1000);  // Show 'C' for 1 second
   //displayStringOnFirstModule("AB", 1000);
 
-  scrollText("A", 300);
+  scrollText("AB", 500);
   //scrollLetterA(500);
   return;
 
@@ -298,15 +298,23 @@ void scrollLetterA(int wait) {
   }
 }
 
+String reverseString(String input) {
+  String reversed = "";
+  for (int i = input.length() - 1; i >= 0; i--) {
+    reversed += input[i];
+  }
+  return reversed;
+}
+
 void scrollText(String text, int wait) {
-  int letterWidth = 4;           // Each letter is 4 columns wide
+  int letterWidth = 5;           // Each letter is now 5 columns wide (4 for pixels, 1 for spacing)
   int numColumns = 16;           // Total columns for both modules
   int totalColumns = text.length() * letterWidth;  // Calculate total width of the text in columns
-
+  
+  text = reverseString(text);
+  
   // Scroll the entire text from right to left across both modules
   for (int scrollPosition = -totalColumns - numColumns; scrollPosition <= numColumns; scrollPosition++) {
-  // for (int scrollPosition = totalColumns + numColumns; scrollPosition >= -numColumns; scrollPosition--) {
- 
     clearGrid();  // Clear the grid before each new frame
 
     // Loop through each character in the text
@@ -323,7 +331,7 @@ void scrollText(String text, int wait) {
 
       // Loop through each pixel in the current letter
       for (int i = 0; i < letterLength; i++) {
-        int columnOffset = alphabetPixels[letterIndex][i] % letterWidth;                      // Column position within the letter
+        int columnOffset = alphabetPixels[letterIndex][i] % 4;  // Column position within the letter (still 4-pixel width)
         int pixelColumn = letterStartPosition + columnOffset;    // Scrolling column position
 
         // Only display pixels within the visible grid (0 to 15 columns)
