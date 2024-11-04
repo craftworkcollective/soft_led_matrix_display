@@ -52,12 +52,14 @@ int serpentineMap[LED_COUNT] = {
   151, 150, 149, 148, 147, 146, 145, 144,  // Row 2 (right to left)
   152, 153, 154, 155, 156, 157, 158, 159,  // Row 1 (left to right)
 
-  // fifth Module LED Mapping (Reversed)
-  194, 193, 192, 191, 190, 189, 188,  // Row 5 (right to left)
-  181, 182, 183, 184, 185, 186, 187,  // Row 4 (left to right)
-  180, 179, 178, 177, 176, 175, 174,  // Row 3 (right to left)
-  167, 168, 169, 170, 171, 172, 173,  // Row 2 (left to right)
-  166, 165, 164, 163, 162, 161, 160   // Row 1 (right to left)
+  // fifth Module LED Mapping (Reversed Order)
+  192, 193, 194, 195, 196, 197, 198, 199,  // Row 5 (left to right)
+  191, 190, 189, 188, 187, 186, 185, 184,  // Row 4 (right to left)
+  176, 177, 178, 179, 180, 181, 182, 183,  // Row 3 (left to right)
+  175, 174, 173, 172, 171, 170, 169, 168,  // Row 2 (right to left)
+  160, 161, 162, 163, 164, 165, 166, 167   // Row 1 (left to right)
+
+
 
 
 };
