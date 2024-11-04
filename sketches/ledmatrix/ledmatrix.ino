@@ -52,6 +52,7 @@ int serpentineMap[LED_COUNT] = {
   151, 150, 149, 148, 147, 146, 145, 144,  // Row 2 (right to left)
   152, 153, 154, 155, 156, 157, 158, 159,  // Row 1 (left to right)
 
+
   /*
   // fifth Module LED Mapping (Reversed Order)
   192, 193, 194, 195, 196, 197, 198, 199,  // Row 5 (left to right)
@@ -59,7 +60,7 @@ int serpentineMap[LED_COUNT] = {
   176, 177, 178, 179, 180, 181, 182, 183,  // Row 3 (left to right)
   175, 174, 173, 172, 171, 170, 169, 168,  // Row 2 (right to left)
   160, 161, 162, 163, 164, 165, 166, 167   // Row 1 (left to right)
-*/ 
+  */
 
 
 
@@ -331,13 +332,14 @@ void setup() {
   strip.begin();            // INITIALIZE NeoPixel strip object (REQUIRED)
   strip.show();             // Turn OFF all pixels ASAP
   strip.setBrightness(50);  // Set BRIGHTNESS to about 1/5 (max = 255)
-  setState(SCROLLING_TEXT);
+  clearGrid();
+  //setState(SCROLLING_TEXT);
 }
 
 void loop() {
   //lightUpOneByOne(100);
-   scrollText("A", 500);
-   
+  scrollText("A", 500);
+
   //scrollText("ABC", 500);
   //scrollText("ABCDEFGHIJKLMNOPQRSTUVWXYZ", 500);
   //scrollLetterA(500);
@@ -549,13 +551,13 @@ String reverseString(String input) {
 
 void scrollText(String text, int wait) {
   int letterWidth = 5;                             // Each letter is now 5 columns wide (4 for pixels, 1 for spacing)
-  int numColumns = 32;                             // Total columns for both modules
+  int numColumns = 40;                             // Total columns for both modules
   int totalColumns = text.length() * letterWidth;  // Calculate total width of the text in columns
 
   text = reverseString(text);
 
   // Scroll the entire text from right to left across both modules
-  for (int scrollPosition = -totalColumns ; scrollPosition <= numColumns; scrollPosition++) {
+  for (int scrollPosition = -totalColumns; scrollPosition <= numColumns; scrollPosition++) {
     clearGrid();  // Clear the grid before each new frame
 
     // Loop through each character in the text
@@ -585,9 +587,10 @@ void scrollText(String text, int wait) {
           // Determine if the pixel is in the first or second module
           if (!isEven) {
 
-
-            // First module (columns 0-7)
-            ledIndex = currentLetter[i] + moduleNumber * 40 + letterStartPosition % 8;
+            if (letterStartPosition % 8 > 4) {
+                 ledIndex = currentLetter[i] + moduleNumber * 40 -(8 - letterStartPosition % 8);
+            } else
+              ledIndex = currentLetter[i] + moduleNumber * 40 + letterStartPosition % 8;
 
 
             // Serial.print("ODD: ");
