@@ -5,7 +5,7 @@
 #endif
 
 #define LED_PIN 6
-#define LED_COUNT 160
+#define LED_COUNT 200
 Adafruit_NeoPixel strip(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
 
 // ---  STATE MACHINE --- //
@@ -50,7 +50,14 @@ int serpentineMap[LED_COUNT] = {
   135, 134, 133, 132, 131, 130, 129, 128,  // Row 4 (right to left)
   136, 137, 138, 139, 140, 141, 142, 143,  // Row 3 (left to right)
   151, 150, 149, 148, 147, 146, 145, 144,  // Row 2 (right to left)
-  152, 153, 154, 155, 156, 157, 158, 159   // Row 1 (left to right)
+  152, 153, 154, 155, 156, 157, 158, 159,  // Row 1 (left to right)
+
+  // fifth Module LED Mapping (Reversed)
+  194, 193, 192, 191, 190, 189, 188,  // Row 5 (right to left)
+  181, 182, 183, 184, 185, 186, 187,  // Row 4 (left to right)
+  180, 179, 178, 177, 176, 175, 174,  // Row 3 (right to left)
+  167, 168, 169, 170, 171, 172, 173,  // Row 2 (left to right)
+  166, 165, 164, 163, 162, 161, 160   // Row 1 (right to left)
 
 
 };
@@ -325,7 +332,7 @@ void setup() {
 }
 
 void loop() {
-  //lightUpOneByOne(100);
+  lightUpOneByOne(100);
   //lightUpColumns(1000);
   //highlightRows(1000);
 
@@ -334,7 +341,9 @@ void loop() {
   //displayLetterOnFirstModule('C', 1000);  // Show 'C' for 1 second
   //displayStringOnFirstModule("AB", 1000);
 
-  scrollText("ABCDEFGHIJKLMNOPQRSTUVWXYZ", 500);
+  // scrollText("A", 500);
+  //scrollText("ABC", 500);
+  //scrollText("ABCDEFGHIJKLMNOPQRSTUVWXYZ", 500);
   //scrollLetterA(500);
   return;
 
@@ -476,8 +485,7 @@ void lightUpColumns(int wait) {
 }
 
 void lightUpOneByOne(int wait) {
-  // Loop through all 80 LEDs in the serpentineMap
-  for (int i = 0; i < 80; i++) {
+  for (int i = 0; i < LED_COUNT; i++) {
     clearGrid();  // Clear the grid before lighting up the next LED
     // Get the LED index from the serpentine map
     int ledIndex = serpentineMap[i];
@@ -542,6 +550,7 @@ String reverseString(String input) {
   return reversed;
 }
 
+
 void scrollText(String text, int wait) {
   int letterWidth = 5;                             // Each letter is now 5 columns wide (4 for pixels, 1 for spacing)
   int numColumns = 32;                             // Total columns for both modules
@@ -554,6 +563,7 @@ void scrollText(String text, int wait) {
     clearGrid();  // Clear the grid before each new frame
 
     // Loop through each character in the text
+    // int scrollPosition = 6;
     for (int charIndex = 0; charIndex < text.length(); charIndex++) {
       char letter = text[charIndex];             // Get the current letter
       int letterIndex = getLetterIndex(letter);  // Get the index of the letter in the alphabet array
@@ -577,13 +587,23 @@ void scrollText(String text, int wait) {
           int ledIndex;
 
           // Determine if the pixel is in the first or second module
-          if (isEven) {
+          if (!isEven) {
+
+
             // First module (columns 0-7)
             ledIndex = currentLetter[i] + moduleNumber * 40 + letterStartPosition % 8;
+
+
+            Serial.print("ODD: ");
+            Serial.println(moduleNumber);
+
           } else {
             // Second module (columns 8-15)
             ledIndex = currentLetter[i] + letterStartPosition + moduleNumber * 32;  // Offset by 32 for the second module
+            Serial.print("EVEN: ");
+            Serial.println(moduleNumber);
           }
+
 
           // Map to the correct LED in the serpentine layout
           if (ledIndex >= 0 && ledIndex < LED_COUNT) {
