@@ -5,7 +5,7 @@
 #endif
 
 #define LED_PIN 6
-#define LED_COUNT 200
+#define LED_COUNT 160
 Adafruit_NeoPixel strip(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
 
 // ---  STATE MACHINE --- //
@@ -52,13 +52,14 @@ int serpentineMap[LED_COUNT] = {
   151, 150, 149, 148, 147, 146, 145, 144,  // Row 2 (right to left)
   152, 153, 154, 155, 156, 157, 158, 159,  // Row 1 (left to right)
 
+  /*
   // fifth Module LED Mapping (Reversed Order)
   192, 193, 194, 195, 196, 197, 198, 199,  // Row 5 (left to right)
   191, 190, 189, 188, 187, 186, 185, 184,  // Row 4 (right to left)
   176, 177, 178, 179, 180, 181, 182, 183,  // Row 3 (left to right)
   175, 174, 173, 172, 171, 170, 169, 168,  // Row 2 (right to left)
   160, 161, 162, 163, 164, 165, 166, 167   // Row 1 (left to right)
-
+*/ 
 
 
 
@@ -334,16 +335,9 @@ void setup() {
 }
 
 void loop() {
-  lightUpOneByOne(100);
-  //lightUpColumns(1000);
-  //highlightRows(1000);
-
-  //displayLetterOnFirstModule('A', 1000);  // Show 'A' for 1 second
-  //displayLetterOnFirstModule('B', 1000);  // Show 'B' for 1 second
-  //displayLetterOnFirstModule('C', 1000);  // Show 'C' for 1 second
-  //displayStringOnFirstModule("AB", 1000);
-
-  // scrollText("A", 500);
+  //lightUpOneByOne(100);
+   scrollText("A", 500);
+   
   //scrollText("ABC", 500);
   //scrollText("ABCDEFGHIJKLMNOPQRSTUVWXYZ", 500);
   //scrollLetterA(500);
@@ -561,7 +555,7 @@ void scrollText(String text, int wait) {
   text = reverseString(text);
 
   // Scroll the entire text from right to left across both modules
-  for (int scrollPosition = -totalColumns - numColumns; scrollPosition <= numColumns; scrollPosition++) {
+  for (int scrollPosition = -totalColumns ; scrollPosition <= numColumns; scrollPosition++) {
     clearGrid();  // Clear the grid before each new frame
 
     // Loop through each character in the text
@@ -596,14 +590,14 @@ void scrollText(String text, int wait) {
             ledIndex = currentLetter[i] + moduleNumber * 40 + letterStartPosition % 8;
 
 
-            Serial.print("ODD: ");
-            Serial.println(moduleNumber);
+            // Serial.print("ODD: ");
+            // Serial.println(moduleNumber);
 
           } else {
             // Second module (columns 8-15)
             ledIndex = currentLetter[i] + letterStartPosition + moduleNumber * 32;  // Offset by 32 for the second module
-            Serial.print("EVEN: ");
-            Serial.println(moduleNumber);
+            // Serial.print("EVEN: ");
+            // Serial.println(moduleNumber);
           }
 
 
