@@ -53,17 +53,14 @@ int serpentineMap[LED_COUNT] = {
   152, 153, 154, 155, 156, 157, 158, 159,  // Row 1 (left to right)
 
 
-  /*
   // fifth Module LED Mapping (Reversed Order)
+  /*
   192, 193, 194, 195, 196, 197, 198, 199,  // Row 5 (left to right)
   191, 190, 189, 188, 187, 186, 185, 184,  // Row 4 (right to left)
   176, 177, 178, 179, 180, 181, 182, 183,  // Row 3 (left to right)
   175, 174, 173, 172, 171, 170, 169, 168,  // Row 2 (right to left)
   160, 161, 162, 163, 164, 165, 166, 167   // Row 1 (left to right)
   */
-
-
-
 };
 
 
@@ -338,11 +335,11 @@ void setup() {
 
 void loop() {
   //lightUpOneByOne(100);
-  scrollText("A", 500);
-
+  scrollText("A", 200);
+  //scrollText("HELLO WORLD", 500);
   //scrollText("ABC", 500);
   //scrollText("ABCDEFGHIJKLMNOPQRSTUVWXYZ", 500);
-  //scrollLetterA(500);
+
   return;
 
 
@@ -555,14 +552,15 @@ void scrollText(String text, int wait) {
   int totalColumns = text.length() * letterWidth;  // Calculate total width of the text in columns
 
   text = reverseString(text);
-
   // Scroll the entire text from right to left across both modules
   for (int scrollPosition = -totalColumns; scrollPosition <= numColumns; scrollPosition++) {
+
+    //Serial.println(scrollPosition);
     clearGrid();  // Clear the grid before each new frame
 
     // Loop through each character in the text
-    // int scrollPosition = 6;
     for (int charIndex = 0; charIndex < text.length(); charIndex++) {
+
       char letter = text[charIndex];             // Get the current letter
       int letterIndex = getLetterIndex(letter);  // Get the index of the letter in the alphabet array
 
@@ -573,36 +571,21 @@ void scrollText(String text, int wait) {
       // Calculate the starting column for this letter in the scroll
       int letterStartPosition = (charIndex * letterWidth) + scrollPosition;
 
+
       // Loop through each pixel in the current letter
       for (int i = 0; i < letterLength; i++) {
-        int columnOffset = alphabetPixels[letterIndex][i] % 4;  // Column position within the letter (still 4-pixel width)
-        int pixelColumn = letterStartPosition + columnOffset;   // Scrolling column position
-        int moduleNumber = pixelColumn / 8;
-        bool isEven = moduleNumber % 2;
+        int columnOffset = currentLetter[i] % 4;               // Column position within the letter (still 4-pixel width)
+        int pixelColumn = letterStartPosition + columnOffset;  // Scrolling column position
 
-        // Only display pixels within the visible grid (0 to 15 columns)
+        // Only display pixels within the visible grid
         if (pixelColumn >= 0 && pixelColumn < numColumns) {
-          int ledIndex;
+          int moduleNumber = pixelColumn / 8;
+          int rowPosition = currentLetter[i] / 4 / 2;
 
-          // Determine if the pixel is in the first or second module
-          if (!isEven) {
-
-            if (letterStartPosition % 8 > 4) {
-                 ledIndex = currentLetter[i] + moduleNumber * 40 -(8 - letterStartPosition % 8);
-            } else
-              ledIndex = currentLetter[i] + moduleNumber * 40 + letterStartPosition % 8;
-
-
-            // Serial.print("ODD: ");
-            // Serial.println(moduleNumber);
-
-          } else {
-            // Second module (columns 8-15)
-            ledIndex = currentLetter[i] + letterStartPosition + moduleNumber * 32;  // Offset by 32 for the second module
-            // Serial.print("EVEN: ");
-            // Serial.println(moduleNumber);
-          }
-
+          // Calculate the ledIndex across the module boundary
+          int moduleStart = moduleNumber * 40;
+          int columnPositionWithinModule = pixelColumn % 8;
+          int ledIndex = moduleStart + rowPosition * 8 + columnPositionWithinModule;
 
           // Map to the correct LED in the serpentine layout
           if (ledIndex >= 0 && ledIndex < LED_COUNT) {
@@ -612,6 +595,7 @@ void scrollText(String text, int wait) {
         }
       }
     }
+
 
     strip.show();  // Show the updated LED states
     delay(wait);   // Wait before moving to the next frame
