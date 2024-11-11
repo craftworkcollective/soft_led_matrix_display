@@ -4,7 +4,7 @@
 #define PIN 6
 
 // Define the number of NeoPixels
-#define NUMPIXELS 30 // 5x6 grid
+#define NUMPIXELS 91 // 5x6 grid
 
 // Initialize the NeoPixel library
 Adafruit_NeoPixel pixels(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);

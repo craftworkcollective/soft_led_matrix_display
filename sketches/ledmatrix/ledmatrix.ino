@@ -4,8 +4,8 @@
 #include <avr/power.h>
 #endif
 
-#define LED_PIN 6
-#define LED_COUNT 160
+#define LED_PIN 9
+#define LED_COUNT 240
 Adafruit_NeoPixel strip(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
 
 // ---  STATE MACHINE --- //
@@ -54,13 +54,21 @@ int serpentineMap[LED_COUNT] = {
 
 
   // fifth Module LED Mapping (Reversed Order)
-  /*
   192, 193, 194, 195, 196, 197, 198, 199,  // Row 5 (left to right)
   191, 190, 189, 188, 187, 186, 185, 184,  // Row 4 (right to left)
   176, 177, 178, 179, 180, 181, 182, 183,  // Row 3 (left to right)
   175, 174, 173, 172, 171, 170, 169, 168,  // Row 2 (right to left)
-  160, 161, 162, 163, 164, 165, 166, 167   // Row 1 (left to right)
-  */
+  160, 161, 162, 163, 164, 165, 166, 167,   // Row 1 (left to right)
+
+      // Sixth Module LED Mapping (following serpentine layout)
+  200, 201, 202, 203, 204, 205, 206, 207,  // Row 1 (left to right)
+  215, 214, 213, 212, 211, 210, 209, 208,  // Row 2 (right to left)
+  216, 217, 218, 219, 220, 221, 222, 223,  // Row 3 (left to right)
+  231, 230, 229, 228, 227, 226, 225, 224,  // Row 4 (right to left)
+  232, 233, 234, 235, 236, 237, 238, 239   // Row 5 (left to right)
+
+
+
 };
 
 
@@ -328,14 +336,14 @@ void setup() {
 
   strip.begin();            // INITIALIZE NeoPixel strip object (REQUIRED)
   strip.show();             // Turn OFF all pixels ASAP
-  strip.setBrightness(50);  // Set BRIGHTNESS to about 1/5 (max = 255)
+  strip.setBrightness(20);  // Set BRIGHTNESS to about 1/5 (max = 255)
   clearGrid();
   //setState(SCROLLING_TEXT);
 }
 
 void loop() {
   //lightUpOneByOne(100);
-  scrollText("A", 200);
+  scrollText("VICTORIA MANGANIELLO LOVES CRAFTWORK COLLECTIVE", 200);
   //scrollText("HELLO WORLD", 500);
   //scrollText("ABC", 500);
   //scrollText("ABCDEFGHIJKLMNOPQRSTUVWXYZ", 500);
@@ -548,7 +556,7 @@ String reverseString(String input) {
 
 void scrollText(String text, int wait) {
   int letterWidth = 5;                             // Each letter is now 5 columns wide (4 for pixels, 1 for spacing)
-  int numColumns = 40;                             // Total columns for both modules
+  int numColumns = 48;                             // Total columns for both modules
   int totalColumns = text.length() * letterWidth;  // Calculate total width of the text in columns
 
   text = reverseString(text);
@@ -604,7 +612,7 @@ void scrollText(String text, int wait) {
 
 
 int getLetterIndex(char letter) {
-  if (letter == " ")
+  if (letter == ' ')
     return 4;
   else
     return letter - 'A';  // Returns 0 for 'A', 1 for 'B', etc.
